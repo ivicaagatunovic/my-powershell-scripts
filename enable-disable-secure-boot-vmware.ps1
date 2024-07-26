@@ -1,4 +1,45 @@
+<#
+.SYNOPSIS
+    This script manages VM secure boot settings in a VMware environment. 
+    It includes functions to sort servers by data center, check and update secure boot settings, and manage VM power states as necessary.
+
+.DESCRIPTION
+    The script contains functions to:
+    1. Categorize servers into different data centers based on naming conventions.
+    2. Retrieve and update the secure boot setting of virtual machines (VMs).
+    3. Disable or enable secure boot on VMs, handling VM power state transitions as needed.
+    4. Connect to specified vCenter servers to apply configuration changes.
+
+.EXAMPLE
+    $cred = Get-Credential
+    $unsortedArray = 'ivica01.domain.local', 'ivica02.domain.local'
+    $sortedServerHash = triage-dc -serverArray $unsortedArray
+    enable-vmsecureboot -serverArray $sortedServerHash.dc2 -vcenter 'vcenter02.domain.local' -cred $cred
+
+    This example sorts the provided server array by data center and enables secure boot on VMs located in data center 'dc2' using the specified vCenter server.
+
+.NOTES
+    Ensure that VMware PowerCLI is installed and properly configured.
+    Update the `$unsortedArray` and vCenter server addresses according to your environment's requirements.
+        Author : Ivica Agatunovic
+        WebSite: https://github.com/ivicaagatunovic
+        Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024
+#>
+
 function triage-dc(){
+    <#
+    .SYNOPSIS
+        Sorts an array of server names into different data centers based on naming patterns.
+
+    .DESCRIPTION
+        This function takes an array of server names and sorts them into a hashtable where the keys are data center names and the values are arrays of server names belonging to each data center. The sorting is done based on regex patterns matching the server names.
+
+    .PARAMETER serverArray
+        An array of server names to be sorted.
+
+    .OUTPUTS
+        A hashtable where keys are data center names (e.g., 'dc1', 'dc2', 'dc3') and values are arrays of server names that match the respective data center pattern.
+    #>
     param(
         [String[]]$serverArray
     )
@@ -18,6 +59,19 @@ function triage-dc(){
 }
 
 Function get-vmsecureboot {
+    <#
+    .SYNOPSIS
+        Retrieves the secure boot status of a virtual machine.
+
+    .DESCRIPTION
+        This function checks whether secure boot is enabled or disabled on a VM by inspecting its boot options.
+
+    .PARAMETER vm
+        The virtual machine object for which the secure boot status is to be retrieved.
+
+    .OUTPUTS
+        Returns a string indicating the secure boot status: 'enabled' or 'disabled'.
+    #>
     param(
         [Parameter(
             Mandatory = $true,
@@ -33,6 +87,25 @@ Function get-vmsecureboot {
 }
 
 function disable-vmsecureboot() {
+    <#
+    .SYNOPSIS
+        Disables secure boot on specified VMs by connecting to a vCenter server.
+
+    .DESCRIPTION
+        This function connects to the specified vCenter server, retrieves VMs from the provided server array, and disables secure boot on them. It handles VM power state transitions, ensuring VMs are powered off before making configuration changes, and then restarts them if necessary.
+
+    .PARAMETER serverArray
+        An array of server names whose secure boot settings are to be disabled.
+
+    .PARAMETER vcenter
+        The vCenter server to connect to for applying the secure boot settings.
+
+    .PARAMETER cred
+        The credentials used to authenticate with the vCenter server.
+
+    .OUTPUTS
+        Writes status messages indicating the progress and outcome of the secure boot configuration changes.
+    #>
     param(
         [Parameter(Mandatory)]
         [String[]]$serverArray,
@@ -75,6 +148,25 @@ function disable-vmsecureboot() {
 }
 
 function enable-vmsecureboot() {
+    <#
+    .SYNOPSIS
+        Enables secure boot on specified VMs by connecting to a vCenter server.
+
+    .DESCRIPTION
+        This function connects to the specified vCenter server, retrieves VMs from the provided server array, and enables secure boot on them. It handles VM power state transitions, ensuring VMs are powered off before making configuration changes, and then restarts them if necessary.
+
+    .PARAMETER serverArray
+        An array of server names whose secure boot settings are to be enabled.
+
+    .PARAMETER vcenter
+        The vCenter server to connect to for applying the secure boot settings.
+
+    .PARAMETER cred
+        The credentials used to authenticate with the vCenter server.
+
+    .OUTPUTS
+        Writes status messages indicating the progress and outcome of the secure boot configuration changes.
+    #>
     param(
         [Parameter(Mandatory)]
         [String[]]$serverArray,

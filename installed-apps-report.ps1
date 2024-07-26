@@ -1,47 +1,44 @@
-# This script generates a report of installed applications on a Windows system and uploads it to an S3 bucket.
-# 
-# Summary:
-# The script performs the following tasks:
-# 1. Retrieves system details such as FQDN, computer name, and OS version.
-# 2. Creates an event log source if it doesn't already exist.
-# 3. Defines a function to get installed applications from the registry.
-# 4. Determines the OS architecture and fetches applications accordingly.
-# 5. Formats the application data and outputs it to the console, a CSV file, or a GridView.
-# 6. Imports required PowerShell modules for AWS S3 operations.
-# 7. Generates the installed applications report and logs the event.
-# 8. Uploads the generated report to an S3 bucket.
-# 9. Logs the success or failure of the upload operation.
-#
-# Variables:
-# - $fqdn: Fully Qualified Domain Name of the computer.
-# - $computername: Name of the computer.
-# - $osversion: Operating system version.
-# - $EndpointUrl: S3 bucket endpoint URL.
-# - $reportKey: Access key for the S3 bucket.
-# - $reportSecret: Secret key for the S3 bucket.
-# - $reportpath: Path to save the generated report.
-# - $eventidreport: Event ID for report generation.
-# - $eventidupload: Event ID for a successful upload.
-# - $eventiduploaderror: Event ID for upload error.
-# - $modules: List of PowerShell modules required for the script.
-#
-# Functions:
-# - Get-InstalledApplication: Retrieves installed applications from the registry.
-# - Import-PSModule: Imports the required PowerShell modules if not already imported.
-#
-# Example Usage:
-# - To generate and upload a report of installed applications:
-#   Run the script without any parameters.
-#
-# - To view the installed applications in a GridView:
-#   Modify the 'Get-InstalledApplication' call to use '-OutputType 'GridView''.
-#
-# - To output the installed applications to the console:
-#   Modify the 'Get-InstalledApplication' call to use '-OutputType 'Console''.
-#
-# Notes:
-# - Ensure the required AWS Tools PowerShell modules are installed and available.
-# - Ensure the appropriate permissions are set for the S3 bucket access.
+<#
+    .SYNOPSIS
+        Generates a report of installed applications on a Windows system and uploads it to an S3 bucket.
+
+    .DESCRIPTION
+        This script performs the following tasks:
+        1. Retrieves system details such as FQDN, computer name, and OS version.
+        2. Creates an event log source if it doesn't already exist.
+        3. Defines a function to get installed applications from the registry.
+        4. Determines the OS architecture and fetches applications accordingly.
+        5. Formats the application data and outputs it to the console, a CSV file, or a GridView.
+        6. Imports required PowerShell modules for AWS S3 operations.
+        7. Generates the installed applications report and logs the event.
+        8. Uploads the generated report to an S3 bucket.
+        9. Logs the success or failure of the upload operation.
+
+    .FUNCTION Get-InstalledApplication
+        Retrieves installed applications from the registry.
+
+    .FUNCTION Import-PSModule
+        Imports the required PowerShell modules if not already imported.
+
+    .EXAMPLE
+        To generate and upload a report of installed applications:
+        Run the script without any parameters.
+
+    .EXAMPLE
+        To view the installed applications in a GridView:
+        Modify the 'Get-InstalledApplication' call to use '-OutputType 'GridView''.
+
+    .EXAMPLE
+        To output the installed applications to the console:
+        Modify the 'Get-InstalledApplication' call to use '-OutputType 'Console''.
+
+    .NOTES
+        - Ensure the required AWS Tools PowerShell modules are installed and available.
+        - Ensure the appropriate permissions are set for the S3 bucket access.
+        Author : Ivica Agatunovic
+        WebSite: https://github.com/ivicaagatunovic
+        Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024
+#>
 
 $fqdn = ([System.Net.Dns]::GetHostByName(($env:computerName))).hostname
 $computername = $env:computerName

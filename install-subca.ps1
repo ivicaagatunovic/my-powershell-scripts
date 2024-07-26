@@ -1,4 +1,3 @@
-Function Install-SubCA {
     <#
         .SYNOPSIS
             This function will install PKI SubCA.
@@ -16,7 +15,13 @@ Function Install-SubCA {
             The CRL File path where CRL are published (Default is C:\Windows\System32\CertSrv\CertEnroll)
         .PARAMETER CRLURLPath
             The CRL URL Path registered as CRL/AIA extensions in client certificates generated Ex: "pki.domain.local")
-    #>
+        .NOTES
+            Author : Ivica Agatunovic
+            WebSite: https://github.com/ivicaagatunovic
+            Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024
+
+#>
+Function Install-SubCA {
     
     [CmdletBinding()]
     param (

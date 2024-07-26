@@ -1,3 +1,26 @@
+<#
+    .SYNOPSIS
+        This script configures and manages an Rclone service to mount cloud storage.
+
+    .DESCRIPTION
+        It performs the following tasks:
+        1. Defines parameters for Rclone configuration and service management.
+        2. Creates or overwrites the Rclone configuration file with provided settings.
+        3. Determines the service status and start type based on input parameters.
+        4. Constructs Rclone mount parameters including options for cache, drive type, and logging.
+        5. Installs or reconfigures the Rclone service using NSSM (Non-Sucking Service Manager).
+        6. Ensures the service is running or stopped based on input parameters.
+        7. Sets the service startup type to automatic or disabled as specified.
+
+    .EXAMPLE
+        .\rclone-drive-map-s3.ps1 -rclone_enabled 'enabled' -rclone_drive_letter 'Z:' -rclone_vfs_cache_mode 'full' -rclone_bucket_name 'mybucket' -log_file 'C:\LOGS\rclone\logfile.log' -log_level 'INFO'
+
+    .NOTES
+        Author : Ivica Agatunovic
+        WebSite: https://github.com/ivicaagatunovic
+        Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024 
+#>
+
 # Define parameters with default values
 param (
     [string]$rclone_enabled = 'enabled',

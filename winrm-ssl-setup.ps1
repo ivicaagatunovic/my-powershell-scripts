@@ -1,26 +1,31 @@
-# This script configures Windows Remote Management (WinRM) with HTTPS listener using a self-signed certificate.
-# It performs the following tasks:
-# 1. Retrieves system details such as the computer's DNS name.
-# 2. Creates an event log source if it doesn't already exist.
-# 3. Logs the start of the WinRM configuration process.
-# 4. Removes any existing HTTP listeners.
-# 5. Generates a self-signed certificate for WinRM.
-# 6. Configures WinRM settings for secure communication.
-# 7. Restarts the WinRM service to apply the changes.
-# 8. Configures the Windows Firewall to allow WinRM HTTPS traffic.
-# 9. Logs the completion of the configuration process along with execution time.
-#
-# Variables:
-# - $StartTime: Start time of the script execution.
-# - $LogSource: Source name for event logging.
-# - $EventID: Event ID for logging.
-# - $DnsName: DNS name of the computer.
-#
-# Notes:
-# - Ensure the script is run with administrative privileges.
-# - Modify the script as necessary for specific configuration requirements.
+<#
+	.Synopsis
+		This script configures Windows Remote Management (WinRM) with HTTPS listener using a self-signed certificate.
+            - Ensure the script is run with administrative privileges.
+            - Modify the script as necessary for specific configuration requirements.
+		
+	.Description
+		It performs the following tasks:
+        1. Retrieves system details such as the computer's DNS name.
+        2. Creates an event log source if it doesn't already exist.
+        3. Logs the start of the WinRM configuration process.
+        4. Removes any existing HTTP listeners.
+        5. Generates a self-signed certificate for WinRM.
+        6. Configures WinRM settings for secure communication.
+        7. Restarts the WinRM service to apply the changes.
+        8. Configures the Windows Firewall to allow WinRM HTTPS traffic.
+        9. Logs the completion of the configuration process along with execution time.
 
-# Variable initialization
+	.Example
+		winrm-ssl-setup.ps1
+
+	.Notes
+		Author : Ivica Agatunovic
+		WebSite: https://github.com/ivicaagatunovic
+		Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024 
+
+#>
+
 # variable
 $StartTime    = (Get-Date).Second
 $LogSource    = "WinRMsetup"
