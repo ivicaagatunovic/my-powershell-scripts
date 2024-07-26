@@ -21,7 +21,7 @@
 # - $reportSecret: Secret key for the S3 bucket.
 # - $reportpath: Path to save the generated report.
 # - $eventidreport: Event ID for report generation.
-# - $eventidupload: Event ID for successful upload.
+# - $eventidupload: Event ID for a successful upload.
 # - $eventiduploaderror: Event ID for upload error.
 # - $modules: List of PowerShell modules required for the script.
 #
@@ -68,6 +68,7 @@ Function Get-InstalledApplication
 
 $Object =@()
 
+# Since I am doing a report only for Microsoft products, I filter out only Micriosfr apps in the array
 $includeArray = @("*Office*","*SQL*","*Microsoft*","*Windows*","*Visio*","*Project*","*Visual*","*System*","*Agent*","*Access*","*Autoroute*","*MapPoint*","*AX2012*","*AX2009*","*CRM*","*Configuration Manager*","*Dynamics*","*Word*","*PowerPoint*","*Excel*","*Access*","*Operations*","*Power Bi*","SharePoint","*Team*","*OneNote*","*Skype*")
 
 
