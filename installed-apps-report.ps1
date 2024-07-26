@@ -297,7 +297,7 @@ function Import-PSModule ($m) {
         }
         else {
             # If module is not imported, not available on disk, but is in online gallery then install and import
-            Get-Module $m
+            Install-Module $m
             write-host "INFO: Installing PS module $m ... "
             Import-Module $m -Force
             write-host "INFO: Importing PS module $m ... "
