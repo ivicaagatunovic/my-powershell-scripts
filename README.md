@@ -1,2 +1,2 @@
-# my-powershell-scripts
-Various PowerShell scripts
+# My-PowerShell-Scripts
+Collection of my PowerShell scripts
