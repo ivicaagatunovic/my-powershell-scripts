@@ -18,15 +18,21 @@
     }
 
     $diskInfo = [PSCustomObject]@{
-        Drive           = $drive.Name
-        UsedSpaceGB     = [math]::Round(($drive.Used / 1GB), 2)
-        FreeSpaceGB     = [math]::Round(($drive.Free / 1GB), 2)
-        TotalSpaceGB    = [math]::Round(($drive.Used + $drive.Free) / 1GB, 2)
-        FreeSpacePct    = [math]::Round(($drive.Free / ($drive.Used + $drive.Free)) * 100, 2)
+        Drive        = $drive.Name
+        UsedSpaceGB  = [math]::Round(($drive.Used / 1GB), 2)
+        FreeSpaceGB  = [math]::Round(($drive.Free / 1GB), 2)
+        TotalSpaceGB = [math]::Round(($drive.Used + $drive.Free) / 1GB, 2)
+        FreeSpacePct = [math]::Round(($drive.Free / ($drive.Used + $drive.Free)) * 100, 2)
     }
+
+    # Check if Free Space is below 10% and display a warning
+    if ($diskInfo.FreeSpacePct -lt 10) {
+        Write-Host "`n⚠️⚠️ WARNING: Low Disk Space! ⚠️⚠️" -ForegroundColor Red
+    }
+
     $diskInfo | Format-Table -AutoSize
 
-    Write-Host "Analyzing top $TopN largest folders/files in '$Path' up to a depth of $Depth..." -ForegroundColor Cyan
+    Write-Host "Analyzing top $TopN largest folders/files in '$Path' up to a depth of $Depth...`n" -ForegroundColor Cyan
 
     # Function to compute the size of a directory
     function Get-DirectorySize {
@@ -100,7 +106,7 @@
     $totalSpace = $diskInfo.TotalSpaceGB * 1GB
 
     # Display headers
-    Write-Host ("Name".PadRight(70) + "SizeGB".PadRight(10) + "Percentage".PadRight(10) + "Depth")
+    Write-Host ("Name".PadRight(70) + "SizeGB".PadRight(10) + "Percent".PadRight(10) + "Depth")
     Write-Host ("----".PadRight(70, '-') + "------".PadRight(10, '-') + "----------".PadRight(10, '-') + "-----")
 
     # Start with the provided path
@@ -141,4 +147,4 @@
 }
 
 # Example usage
-# Get-DiskUsage -Path "C:\Windows\System32\DriverStore\FileRepository" -TopN 10 -Depth 1
+Get-DiskUsage -Path "C:\Windows\System32\" -TopN 3 -Depth 3
