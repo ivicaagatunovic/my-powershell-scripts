@@ -1,4 +1,36 @@
 ﻿function Get-DiskUsage {
+    <#
+    .SYNOPSIS
+    Analyzes disk usage for a specified path and provides detailed folder size information.
+    
+    .DESCRIPTION
+    This function retrieves disk usage information for a specified path and lists the largest folders/files.
+    It will alert if the free disk space for the drive is below 10%. Additionally, it organizes folder info 
+    by depth and uses visual indicators.
+
+    .EXAMPLE
+    To get the top 10 largest folders/files of path 'C:\Windows\System32' up to a depth of 3:
+
+    Get-DiskUsage -Path "C:\Windows\System32" -TopN 10 -Depth 3
+
+    .EXAMPLE
+    To get detailed folder size information for path 'C:\' considering top 5 items:
+
+    Get-DiskUsage -Path "C:\" -TopN 5 -Depth 2
+
+    .PARAMETER Path
+    Specifies the directory path to analyze. Default is 'C:\'.
+    
+    .PARAMETER TopN
+    Specifies the number of top items to be displayed. Default is 10.
+    
+    .PARAMETER Depth
+    Specifies the depth to explore within the directory structure. Default is 1.
+    .NOTES
+    Author : Ivica Agatunovic
+    WebSite: https://github.com/ivicaagatunovic
+    Linkedin: www.linkedin.com/in/ivica-agatunovic-96090024
+    #>
     param (
         [string]$Path = "C:\",
         [int]$TopN = 10,
@@ -45,7 +77,7 @@
     }
 
     # Improved path truncation to show more relevant parts
-    function Truncate-Path {
+    function Set-TruncatePath {
         param (
             [string]$Path,
             [int]$MaxLength = 60
@@ -91,10 +123,10 @@
 
             if ($CurrentDepth -eq 1) {
                 # Color the root directory name
-                Write-Host ($($indent + "📁 " + (Truncate-Path $displayName)).PadRight(70) + ("💾 " + $sizeGB.ToString()).PadRight(10) + ("% " + $sizePct.ToString()).PadRight(10) + $CurrentDepth.ToString().PadRight(5)) -ForegroundColor Yellow
+                Write-Host ($($indent + "📁 " + (Set-TruncatePath $displayName)).PadRight(70) + ("💾 " + $sizeGB.ToString()).PadRight(10) + ("% " + $sizePct.ToString()).PadRight(10) + $CurrentDepth.ToString().PadRight(5)) -ForegroundColor Yellow
             } else {
                 # Standard output for subfolders
-                Write-Host ($($indent + "📁 " + (Truncate-Path $displayName)).PadRight(70) + ("💾 " + $sizeGB.ToString()).PadRight(10) + ("% " + $sizePct.ToString()).PadRight(10) + $CurrentDepth.ToString().PadRight(5))
+                Write-Host ($($indent + "📁 " + (Set-TruncatePath $displayName)).PadRight(70) + ("💾 " + $sizeGB.ToString()).PadRight(10) + ("% " + $sizePct.ToString()).PadRight(10) + $CurrentDepth.ToString().PadRight(5))
             }
 
             # Recursive call for the next depth level
@@ -139,7 +171,7 @@
             $bar = "█" * ([math]::Round(($item.SizeGB / $maxSize) * 50))
             $colorIndex = [math]::Round((($colors.Length - 1) * $i) / ($topItems.Count - 1))
             $color = $colors[$colorIndex]
-            Write-Host ((Truncate-Path $item.Name).PadRight(55) + "$bar " + "($($item.SizeGB)GB)") -ForegroundColor $color
+            Write-Host ((Set-TruncatePath $item.Name).PadRight(55) + "$bar " + "($($item.SizeGB)GB)") -ForegroundColor $color
         }
     } else {
         Write-Host "No large files or folders found in '$Path'." -ForegroundColor Yellow
